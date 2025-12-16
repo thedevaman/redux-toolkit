@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { storeProduct } from "../redux/slices/product-slice";
 
 const Product = ()=>{
    const [products,setProducts] = useState([])
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
     useEffect(()=>{
 
         fetch('https://fakestoreapi.com/products')
@@ -15,6 +19,11 @@ const Product = ()=>{
         })
 
     },[])
+ 
+    const viewProduct = (item) =>{
+    dispatch(storeProduct(item))
+    navigate('/products-details')
+    }
 
     return(
         <div className="bg-gray-100 min-h-screen flex flex-col py-16 items-center">
@@ -32,7 +41,7 @@ const Product = ()=>{
                      />
                      <h1 className="font-semibold text-lg">{item.title}</h1>
                      <label> ₹{item.price}</label>
-                     <Link to="/products-details" className="bg-green-500 font-medium px-4 py-2 text-white rounded">Procuct Details</Link>
+                     <button onClick={()=>viewProduct(item)} className="bg-green-500 font-medium px-4 py-2 text-white rounded">Procuct Details</button>
                     </div>
                  ))
                 }
